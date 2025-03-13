@@ -2,7 +2,7 @@ package config
 
 type ConfigRoot struct {
 	PackageManagers map[string]PackageManager `yaml:"package_managers"`
-	Global          GlobalSettings            `yaml:"global"`
+	Settings        Settings                  `yaml:"global"`
 	Custom          map[string]CustomManager  `yaml:"custom"`
 	Graph           GraphSettings             `yaml:"graph"`
 }
@@ -14,11 +14,12 @@ type PackageManager struct {
 }
 
 type Package struct {
+	Name    string `yaml:"-"`
 	Version string `yaml:"version"`
 	Enabled bool   `yaml:"enabled"`
 }
 
-type GlobalSettings struct {
+type Settings struct {
 	Parallel bool `yaml:"parallel"`
 	Cache    bool `yaml:"cache"`
 	Lockfile bool `yaml:"lockfile"`

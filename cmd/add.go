@@ -5,7 +5,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/Nykenik24/axle/internal/config"
@@ -24,40 +23,39 @@ var addCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg := config.ReadConfigFrom(".axle.yaml")
-		// packageName := args[0]
-		// if _, managerExists := cfg.GetRoot().PackageManagers[addedTo]; !managerExists {
-		// 	log.Fatalf("Manager %s doesn't exist in configuration", addedTo)
-		// }
-		// cfg.GetRoot().PackageManagers[addedTo].Packages[packageName] = config.Package{
-		// 	Version: version,
-		// 	Enabled: !disabledByDefault,
-		// }
-		// cfg.Write(".axle.yaml")
-		//
-		// fmt.Printf("Added dependency %s to %s\n", packageName, addedTo)
 
 		var packageNames []string
 		packageNames = append(packageNames, args...)
 
-		if _, managerExists := cfg.GetRoot().PackageManagers[addedTo]; !managerExists {
-			log.Fatalf("Manager %s doesn't exist in configuration", addedTo)
+		if _, err := cfg.GetPackageManager(addedTo); err != nil {
+			cfg.GetPackageManagers()[addedTo] = config.PackageManager{
+				Name:     addedTo,
+				Packages: make(map[string]config.Package),
+				Commands: make(map[string]string),
+			}
+		}
+		manager, _ := cfg.GetPackageManager(addedTo)
+		if manager.Packages == nil {
+			manager.Packages = make(map[string]config.Package)
 		}
 
 		for _, packageName := range packageNames {
 			// What we are basically doing is having a nice way of specifying our dependency versions:
 			// It splits the string by @ and uses the string at the left as name and the string at the right as version.
-			options := strings.Split(packageName, "@")
-			name := options[0]
+			pkg := strings.Split(packageName, "@")
+			name := pkg[0]
 			var version string
-			if len(options) == 2 {
-				version = options[1]
+			if len(pkg) == 2 {
+				version = pkg[1]
 			} else {
 				version = "latest"
 			}
 			if _, alreadyExists := cfg.GetRoot().PackageManagers[addedTo].Packages[name]; alreadyExists {
 				fmt.Printf("WARN: Package %s already exists in %s\n", name, addedTo)
+				continue
 			}
-			cfg.GetRoot().PackageManagers[addedTo].Packages[name] = config.Package{
+
+			manager.Packages[name] = config.Package{
 				Enabled: true,
 				Version: version,
 			}
