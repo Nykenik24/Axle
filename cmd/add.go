@@ -20,7 +20,7 @@ var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Adds a new dependency to the project",
 	Long:  `The add command allows you to add a new dependency to the project by specifying the package name and version. This command updates the project's configuration file .axle.yaml with the new dependency, ensuring it is included in the dependency tree for the project. After running this command, the new dependency will be available for installation or use in your project’s environment.`,
-	Args:  cobra.MinimumNArgs(1),
+	Args:  cobra.MinimumNArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg := config.ReadConfigFrom(".axle.yaml")
 
