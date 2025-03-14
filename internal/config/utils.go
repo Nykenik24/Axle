@@ -12,7 +12,6 @@ func GetDefaultConfig() Config {
 		root: ConfigRoot{
 			PackageManagers: make(map[string]PackageManager),
 			Settings:        Settings{},
-			Custom:          make(map[string]CustomManager),
 			Graph:           GraphSettings{},
 		},
 	}
