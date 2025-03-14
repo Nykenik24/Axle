@@ -37,7 +37,8 @@ var updateCmd = &cobra.Command{
 					for pkgName, pkg := range packageManager.Packages {
 						if !pkg.Locked {
 							if pkg.Version != "latest" {
-								pkg.Version = "latest"
+								manager, _ := cfg.GetPackageManager(managerName)
+								manager.Packages[pkgName] = manager.Packages[pkgName].SetVersion("latest")
 								if updateVerbosely {
 									fmt.Printf("--> Updated package %s to latest\n", pkgName)
 								}
@@ -60,6 +61,6 @@ var updateCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(updateCmd)
 
-	updateCmd.Flags().StringArrayVarP(&targetUpdatedManagers, "managers", "m", []string{}, "Managers that will be updated")
+	updateCmd.Flags().StringArrayVarP(&targetUpdatedManagers, "managers", "m", []string{}, "Managers where packages will be updated")
 	updateCmd.Flags().BoolVarP(&updateVerbosely, "verbose", "V", false, "Show every updated package")
 }

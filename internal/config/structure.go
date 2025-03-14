@@ -12,13 +12,6 @@ type PackageManager struct {
 	Packages map[string]Package `yaml:"packages"`
 }
 
-type Package struct {
-	Name    string `yaml:"-"`
-	Version string `yaml:"version"`
-	Enabled bool   `yaml:"enabled"`
-	Locked  bool   `yaml:"locked"`
-}
-
 type Settings struct {
 	Parallel bool `yaml:"parallel"`
 	Cache    bool `yaml:"cache"`

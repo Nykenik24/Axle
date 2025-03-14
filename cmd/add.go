@@ -68,7 +68,7 @@ var addCmd = &cobra.Command{
 			}
 		}
 		cfg.Write(".axle.yaml")
-		fmt.Println("Added all dependencies")
+		fmt.Println("--> Added all dependencies")
 	},
 }
 
