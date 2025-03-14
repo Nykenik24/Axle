@@ -8,7 +8,14 @@ import (
 )
 
 func GetDefaultConfig() Config {
-	return ReadConfigFrom("examples/config.yaml")
+	return Config{
+		root: ConfigRoot{
+			PackageManagers: make(map[string]PackageManager),
+			Settings:        Settings{},
+			Custom:          make(map[string]CustomManager),
+			Graph:           GraphSettings{},
+		},
+	}
 }
 
 func WriteDefaultConfig() {
